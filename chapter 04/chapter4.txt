@@ -1,0 +1,55 @@
+kubeadm init
+
+
+kubeadm join <control-plane-host>:<control-plane-port> --token <token> 
+
+kubeadm init --control-plane-endpoint "<LOAD_BALANCER_DNS>:6443" --upload-certs
+
+kubeadm join <LOAD_BALANCER_DNS>:6443 --token <token> --discovery-token-ca-cert-hash <hash> --control-plane --certificate-key <key>
+
+kOps
+
+curl -Lo kops https://github.com/kubernetes/kops/releases/latest/download/kops-linux-amd64
+chmod +x kops
+sudo mv kops /usr/local/bin/
+
+
+aws configure
+
+aws s3api create-bucket --bucket <your-bucket-name> --region <region>
+
+aws s3api put-bucket-versioning --bucket <your-bucket-name> --versioning-configuration Status=Enabled
+
+export KOPS_STATE_STORE=s3://<your-bucket-name>
+
+
+
+kops create cluster --name=cluster.example.com --zones=us-east-1a --node-count=2 --node-size=t3.medium --master-size=t3.medium
+
+
+kops update cluster cluster.example.com –yes
+
+
+kops validate cluster --wait 10m
+
+kops edit cluster <cluster-name>
+
+kops update cluster <cluster-name> --yes
+
+
+kops edit ig nodes
+
+
+kops rolling-update cluster <cluster-name> --yes
+
+kops upgrade cluster <cluster-name>
+kops update cluster <cluster-name> --yes
+kops rolling-update cluster <cluster-name> --yes
+
+kops delete cluster <cluster-name> --yes
+
+helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
+helm install rancher rancher-latest/rancher --namespace rancher-server --create-namespace
+
+
+

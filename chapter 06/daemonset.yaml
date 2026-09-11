@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: logagent
+spec:
+  selector:
+    matchLabels:
+      name: logagent
+  template:
+    metadata:
+      labels:
+        name: logagent
+    spec:
+      containers:
+      - name: logagent
+        image: fluentd
+
